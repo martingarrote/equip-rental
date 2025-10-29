@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:14
+    container_name: equip-rental-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: equip_rental
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - equip_rental_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  equip_rental_network:
+    driver: bridge
