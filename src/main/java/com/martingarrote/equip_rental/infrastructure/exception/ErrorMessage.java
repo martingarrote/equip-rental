@@ -21,6 +21,10 @@ public enum ErrorMessage {
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde ou entre em contato com o suporte."),
     SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "Serviço temporariamente indisponível. Estamos enfrentando problemas técnicos. Por favor, tente novamente mais tarde."),
 
+    BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Credenciais de acesso estão incorretas"),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Já existe um usuário cadastrado com este email"),
+    USER_INVALID_ROLE(HttpStatus.BAD_REQUEST, "A role informada é inválida, deve ser ADMIN, EMPLOYEE ou CUSTOMER"),
+
     EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não encontrado"),
     EQUIPMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "Equipamento já cadastrado"),
     EQUIPMENT_NOT_AVAILABLE(HttpStatus.CONFLICT, "Equipamento não disponível"),
