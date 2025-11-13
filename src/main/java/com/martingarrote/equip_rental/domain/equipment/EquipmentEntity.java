@@ -1,12 +1,10 @@
 package com.martingarrote.equip_rental.domain.equipment;
 
+import com.martingarrote.equip_rental.domain.equipment.request.EquipmentRequest;
 import com.martingarrote.equip_rental.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(of = {"id", "serialNumber"}, callSuper = false)
+@Builder
 public class EquipmentEntity extends BaseEntity {
 
     @Id
@@ -56,16 +55,32 @@ public class EquipmentEntity extends BaseEntity {
     @Column(name = "acquisition_value", nullable = false, precision = 12, scale = 2)
     private BigDecimal acquisitionValue;
 
-    @FutureOrPresent(message = "{equipment.nextMaintenance.futureOrPresent}")
-    @Column(name = "next_preventive_maintenance")
+    @NotNull(message = "{equipment.nextPreventiveMaintenance.notNull}")
+    @FutureOrPresent(message = "{equipment.nextPreventiveMaintenance.futureOrPresent}")
+    @Column(name = "next_preventive_maintenance", nullable = false)
     private LocalDate nextPreventiveMaintenance;
 
+    @NotNull(message = "{equipment.maintenancePeriodDays.notNull}")
     @Min(value = 1, message = "{equipment.maintenancePeriodDays.min}")
     @Max(value = 1095, message = "{equipment.maintenancePeriodDays.max}")
-    @Column(name = "maintenance_period_days")
+    @Column(name = "maintenance_period_days", nullable = false)
     private Integer maintenancePeriodDays;
 
     @Size(max = 500, message = "{equipment.notes.size}")
     @Column(name = "notes", length = 500)
     private String notes;
+
+    public static EquipmentEntity fromRequest(EquipmentRequest request) {
+        return EquipmentEntity.builder()
+                .name(request.name())
+                .type(request.type())
+                .serialNumber(request.serialNumber())
+                .status(request.status())
+                .acquisitionDate(request.acquisitionDate())
+                .acquisitionValue(request.acquisitionValue())
+                .nextPreventiveMaintenance(request.nextPreventiveMaintenance())
+                .maintenancePeriodDays(request.maintenancePeriodDays())
+                .notes(request.notes())
+                .build();
+    }
 }
