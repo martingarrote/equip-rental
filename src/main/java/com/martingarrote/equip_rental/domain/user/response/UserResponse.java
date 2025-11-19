@@ -20,8 +20,7 @@ public record UserResponse(
         String companyCnpj,
         String department,
         String position,
-        Boolean active,
-        String token
+        Boolean active
 ) {
     public static UserResponse detailed(UserEntity user) {
         return UserResponse.builder()
@@ -39,16 +38,6 @@ public record UserResponse(
     }
     
     public static UserResponse summary(UserEntity user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .active(user.isActive())
-                .build();
-    }
-
-    public static UserResponse token(UserEntity user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
