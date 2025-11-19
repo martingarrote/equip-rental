@@ -61,8 +61,7 @@ public class EquipmentEntity extends BaseEntity {
     private LocalDate nextPreventiveMaintenance;
 
     @NotNull(message = "{equipment.maintenancePeriodDays.notNull}")
-    @Min(value = 1, message = "{equipment.maintenancePeriodDays.min}")
-    @Max(value = 1095, message = "{equipment.maintenancePeriodDays.max}")
+    @Positive(message = "{equipment.maintenancePeriodDays.positive}")
     @Column(name = "maintenance_period_days", nullable = false)
     private Integer maintenancePeriodDays;
 
