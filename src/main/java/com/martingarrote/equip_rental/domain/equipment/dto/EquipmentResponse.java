@@ -33,6 +33,7 @@ public record EquipmentResponse(
 ) {
     public static EquipmentResponse detailed(EquipmentEntity equipment) {
         return EquipmentResponse.builder()
+                .id(equipment.getId())
                 .name(equipment.getName())
                 .type(equipment.getType())
                 .serialNumber(equipment.getSerialNumber())
