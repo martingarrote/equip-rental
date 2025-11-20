@@ -11,8 +11,9 @@ CREATE TABLE equipments
     status                      VARCHAR(20)                 NOT NULL,
     acquisition_date            date                        NOT NULL,
     acquisition_value           DECIMAL(12, 2)              NOT NULL,
-    next_preventive_maintenance date,
-    maintenance_period_days     INTEGER,
+    daily_rental_cost       DECIMAL(12, 2)              NOT NULL,
+    next_preventive_maintenance date                        NOT NULL,
+    maintenance_period_days     INTEGER                     NOT NULL,
     notes                       VARCHAR(500),
     CONSTRAINT pk_equipments PRIMARY KEY (id)
 );

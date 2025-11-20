@@ -55,6 +55,12 @@ public class EquipmentEntity extends BaseEntity {
     @Column(name = "acquisition_value", nullable = false, precision = 12, scale = 2)
     private BigDecimal acquisitionValue;
 
+    @NotNull(message = "{equipment.dailyRentalCost.notNull}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{equipment.dailyRentalCost.positive}")
+    @Digits(integer = 10, fraction = 2, message = "{equipment.dailyRentalCost.format}")
+    @Column(name = "daily_rental_cost", nullable = false, precision = 12, scale = 2)
+    private BigDecimal dailyRentalCost;
+
     @NotNull(message = "{equipment.nextPreventiveMaintenance.notNull}")
     @FutureOrPresent(message = "{equipment.nextPreventiveMaintenance.futureOrPresent}")
     @Column(name = "next_preventive_maintenance", nullable = false)
