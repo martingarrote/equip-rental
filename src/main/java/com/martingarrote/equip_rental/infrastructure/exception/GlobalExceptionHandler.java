@@ -36,9 +36,9 @@ public class GlobalExceptionHandler {
     private static final String PARAMETER_TYPE_MISMATCH_TEMPLATE = "Parâmetro '%s' deve ser do tipo %s";
     private static final String MISSING_PARAMETER_TEMPLATE = "Parâmetro obrigatório '%s' não foi fornecido";
 
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ExceptionResponse> handleBusinessException(
-            BusinessException ex,
+            ServiceException ex,
             HttpServletRequest request
     ) {
         if (ex.getStatus().is5xxServerError()) {

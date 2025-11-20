@@ -4,7 +4,7 @@ import com.martingarrote.equip_rental.domain.user.request.AuthRequest;
 import com.martingarrote.equip_rental.domain.user.request.UserRequest;
 import com.martingarrote.equip_rental.domain.user.response.AuthResponse;
 import com.martingarrote.equip_rental.domain.user.response.UserResponse;
-import com.martingarrote.equip_rental.infrastructure.exception.BusinessException;
+import com.martingarrote.equip_rental.infrastructure.exception.ServiceException;
 import com.martingarrote.equip_rental.infrastructure.exception.ErrorMessage;
 import com.martingarrote.equip_rental.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +26,10 @@ class UserServiceImpl implements UserService {
     @Transactional
     public AuthResponse login(AuthRequest request) {
         var user = repository.findByEmail(request.email())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.OBJECT_NOT_FOUND));
+                .orElseThrow(() -> new ServiceException(ErrorMessage.OBJECT_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new BusinessException(ErrorMessage.BAD_CREDENTIALS);
+            throw new ServiceException(ErrorMessage.BAD_CREDENTIALS);
         }
 
         return AuthResponse.logged(tokenProvider.generateToken(user));
@@ -39,7 +39,7 @@ class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse changeUserRole(String userId, Role newRole) {
         var user = repository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new BusinessException(ErrorMessage.OBJECT_NOT_FOUND));
+                .orElseThrow(() -> new ServiceException(ErrorMessage.OBJECT_NOT_FOUND));
 
         if (user.getRole().equals(newRole)) {
             return UserResponse.detailed(user);
@@ -55,7 +55,7 @@ class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse register(UserRequest request) {
         if (repository.existsByEmail(request.email())) {
-            throw new BusinessException(ErrorMessage.USER_ALREADY_EXISTS);
+            throw new ServiceException(ErrorMessage.USER_ALREADY_EXISTS);
         }
 
         var user = UserEntity.builder()
