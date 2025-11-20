@@ -23,12 +23,10 @@ public enum ErrorMessage {
 
     BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Credenciais de acesso estão incorretas"),
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Já existe um usuário cadastrado com este email"),
-    USER_INVALID_ROLE(HttpStatus.BAD_REQUEST, "A role informada é inválida, deve ser ADMIN, EMPLOYEE ou CUSTOMER"),
 
-    EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não encontrado"),
-    EQUIPMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "Equipamento já cadastrado"),
-    EQUIPMENT_NOT_AVAILABLE(HttpStatus.CONFLICT, "Equipamento não disponível"),
-    EQUIPMENT_IN_USE(HttpStatus.CONFLICT, "Equipamento em uso");
+
+    EQUIPMENT_SERIAL_NUMBER_ALREADY_IN_USE(HttpStatus.CONFLICT, "Número de série informado já está em uso."),
+    EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não foi encontrado");
 
     private final HttpStatus status;
     private final String defaultMessage;
