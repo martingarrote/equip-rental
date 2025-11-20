@@ -15,5 +15,10 @@ CREATE TABLE contracts
     CONSTRAINT pk_contracts PRIMARY KEY (id)
 );
 
+CREATE SEQUENCE contract_number_seq START WITH 1 INCREMENT BY 1;
+
+ALTER TABLE contracts
+    ADD CONSTRAINT uc_contracts_number UNIQUE (number);
+
 ALTER TABLE contracts
     ADD CONSTRAINT FK_CONTRACTS_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES users (id);

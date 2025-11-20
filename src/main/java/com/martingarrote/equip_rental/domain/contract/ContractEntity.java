@@ -6,7 +6,6 @@ import com.martingarrote.equip_rental.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -38,8 +37,9 @@ public class ContractEntity extends BaseEntity {
     @OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RentalEntity> rentals = new ArrayList<>();
 
-    @NotNull(message = "{contract.number.notNull}")
-    @Positive(message = "{contract.number.positive}")
+    @SequenceGenerator(name = "contract_number_seq", sequenceName = "contract_number_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contract_number_seq")
+    @Column(name = "number", nullable = false, unique = true)
     private Long number;
 
     @NotNull(message = "{contract.startDate.notNull}")
