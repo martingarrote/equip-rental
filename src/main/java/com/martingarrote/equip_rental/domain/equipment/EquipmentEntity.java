@@ -1,6 +1,6 @@
 package com.martingarrote.equip_rental.domain.equipment;
 
-import com.martingarrote.equip_rental.domain.equipment.request.EquipmentRequest;
+import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentRequest;
 import com.martingarrote.equip_rental.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

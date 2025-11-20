@@ -1,7 +1,8 @@
-package com.martingarrote.equip_rental.domain.equipment.request;
+package com.martingarrote.equip_rental.domain.equipment.dto;
 
 import com.martingarrote.equip_rental.domain.equipment.EquipmentStatus;
 import com.martingarrote.equip_rental.domain.equipment.EquipmentType;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -31,6 +32,11 @@ public record EquipmentRequest(
         @DecimalMin(value = "0.0", inclusive = false, message = "{equipment.acquisitionValue.positive}")
         @Digits(integer = 10, fraction = 2, message = "{equipment.acquisitionValue.format}")
         BigDecimal acquisitionValue,
+
+        @NotNull(message = "{equipment.dailyRentalCost.notNull}")
+        @DecimalMin(value = "0.0", inclusive = false, message = "{equipment.dailyRentalCost.positive}")
+        @Digits(integer = 10, fraction = 2, message = "{equipment.dailyRentalCost.format}")
+        BigDecimal dailyRentalCost,
 
         @NotNull(message = "{equipment.nextPreventiveMaintenance.notNull}")
         @FutureOrPresent(message = "{equipment.nextPreventiveMaintenance.futureOrPresent}")

@@ -1,4 +1,4 @@
-package com.martingarrote.equip_rental.domain.equipment.response;
+package com.martingarrote.equip_rental.domain.equipment.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.martingarrote.equip_rental.domain.equipment.EquipmentEntity;
@@ -22,6 +22,7 @@ public record EquipmentResponse(
         EquipmentStatus status,
         LocalDate acquisitionDate,
         BigDecimal acquisitionValue,
+        BigDecimal dailyRentalCost,
         LocalDate nextPreventiveMaintenance,
         Integer maintenancePeriodDays,
         String notes,
@@ -38,6 +39,7 @@ public record EquipmentResponse(
                 .status(equipment.getStatus())
                 .acquisitionDate(equipment.getAcquisitionDate())
                 .acquisitionValue(equipment.getAcquisitionValue())
+                .dailyRentalCost(equipment.getDailyRentalCost())
                 .nextPreventiveMaintenance(equipment.getNextPreventiveMaintenance())
                 .maintenancePeriodDays(equipment.getMaintenancePeriodDays())
                 .notes(equipment.getNotes())
