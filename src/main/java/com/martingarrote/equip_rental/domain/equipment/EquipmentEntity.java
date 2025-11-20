@@ -83,6 +83,7 @@ public class EquipmentEntity extends BaseEntity {
                 .status(request.status())
                 .acquisitionDate(request.acquisitionDate())
                 .acquisitionValue(request.acquisitionValue())
+                .dailyRentalCost(request.dailyRentalCost())
                 .nextPreventiveMaintenance(request.nextPreventiveMaintenance())
                 .maintenancePeriodDays(request.maintenancePeriodDays())
                 .notes(request.notes())
