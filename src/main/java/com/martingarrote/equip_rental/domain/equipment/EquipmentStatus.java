@@ -1,6 +1,7 @@
 package com.martingarrote.equip_rental.domain.equipment;
 
 public enum EquipmentStatus {
+    RESERVED("Reservado"),
     AVAILABLE("Disponível"),
     RENTED("Alugado"),
     MAINTENANCE("Manutenção"),

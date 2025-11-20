@@ -1,5 +1,6 @@
 package com.martingarrote.equip_rental.domain.contract;
 
+import com.martingarrote.equip_rental.domain.rental.RentalEntity;
 import com.martingarrote.equip_rental.domain.user.UserEntity;
 import com.martingarrote.equip_rental.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
@@ -11,6 +12,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "Contract")
@@ -32,8 +35,11 @@ public class ContractEntity extends BaseEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private UserEntity customer;
 
+    @OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<RentalEntity> rentals = new ArrayList<>();
+
     @NotNull(message = "{contract.number.notNull}")
-    @Positive(message = "{contract.number.positive")
+    @Positive(message = "{contract.number.positive}")
     private Long number;
 
     @NotNull(message = "{contract.startDate.notNull}")
