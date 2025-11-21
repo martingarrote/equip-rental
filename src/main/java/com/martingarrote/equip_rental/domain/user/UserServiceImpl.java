@@ -69,4 +69,20 @@ class UserServiceImpl implements UserService {
 
         return UserResponse.summary(repository.save(user));
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserEntity findEntityByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(
+                () -> new ServiceException(ErrorMessage.USER_NOT_FOUND)
+        );
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserEntity findEntityById(UUID id) {
+        return repository.findById(id).orElseThrow(
+                () -> new ServiceException(ErrorMessage.USER_NOT_FOUND)
+        );
+    }
 }
