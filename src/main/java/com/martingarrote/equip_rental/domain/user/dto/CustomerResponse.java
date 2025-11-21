@@ -5,6 +5,7 @@ import com.martingarrote.equip_rental.domain.user.UserEntity;
 import lombok.Builder;
 import lombok.With;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -16,7 +17,11 @@ public record CustomerResponse(
         String phone,
         String companyName,
         String companyCnpj,
-        Boolean active
+        Boolean active,
+        LocalDateTime createdAt,
+        String createdBy,
+        LocalDateTime updatedAt,
+        String updatedBy
 ) {
     public static CustomerResponse detailed(UserEntity user) {
         return CustomerResponse.builder()
@@ -27,6 +32,10 @@ public record CustomerResponse(
                 .companyName(user.getCompanyName())
                 .companyCnpj(user.getCompanyCnpj())
                 .active(user.isActive())
+                .createdAt(user.getCreatedAt())
+                .createdBy(user.getCreatedBy())
+                .updatedAt(user.getUpdatedAt())
+                .updatedBy(user.getUpdatedBy())
                 .build();
     }
 
