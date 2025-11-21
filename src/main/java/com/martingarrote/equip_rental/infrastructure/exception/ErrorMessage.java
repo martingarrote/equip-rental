@@ -26,7 +26,9 @@ public enum ErrorMessage {
 
 
     EQUIPMENT_SERIAL_NUMBER_ALREADY_IN_USE(HttpStatus.CONFLICT, "Número de série informado já está em uso."),
-    EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não foi encontrado");
+    EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não foi encontrado"),
+
+    CONTRACT_NOT_FOUND(HttpStatus.NOT_FOUND, "Contrato não foi encontrado");
 
     private final HttpStatus status;
     private final String defaultMessage;
