@@ -22,11 +22,13 @@ public enum ErrorMessage {
     SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "Serviço temporariamente indisponível. Estamos enfrentando problemas técnicos. Por favor, tente novamente mais tarde."),
 
     BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Credenciais de acesso estão incorretas"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "Usuário não encontrado"),
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Já existe um usuário cadastrado com este email"),
 
 
     EQUIPMENT_SERIAL_NUMBER_ALREADY_IN_USE(HttpStatus.CONFLICT, "Número de série informado já está em uso."),
     EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não foi encontrado"),
+    EQUIPMENT_UNAVAILABLE(HttpStatus.CONFLICT, "Equipamento não está disponível"),
 
     CONTRACT_NOT_FOUND(HttpStatus.NOT_FOUND, "Contrato não foi encontrado");
 
