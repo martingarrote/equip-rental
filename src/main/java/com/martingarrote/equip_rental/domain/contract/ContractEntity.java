@@ -1,6 +1,8 @@
 package com.martingarrote.equip_rental.domain.contract;
 
+import com.martingarrote.equip_rental.domain.equipment.EquipmentStatus;
 import com.martingarrote.equip_rental.domain.rental.RentalEntity;
+import com.martingarrote.equip_rental.domain.rental.RentalStatus;
 import com.martingarrote.equip_rental.domain.user.UserEntity;
 import com.martingarrote.equip_rental.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
@@ -38,7 +40,6 @@ public class ContractEntity extends BaseEntity {
     private List<RentalEntity> rentals = new ArrayList<>();
 
     @SequenceGenerator(name = "contract_number_seq", sequenceName = "contract_number_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contract_number_seq")
     @Column(name = "number", nullable = false, unique = true)
     private Long number;
 
@@ -64,4 +65,17 @@ public class ContractEntity extends BaseEntity {
     @Column(name = "notes", length = 500)
     private String notes;
 
+    public void addRental(RentalEntity rental) {
+        rentals.add(rental);
+        rental.setContract(this);
+        rental.setCustomer(this.customer);
+
+        if (this.status == ContractStatus.PENDING_APPROVAL) {
+            rental.setStatus(RentalStatus.PENDING);
+            rental.getEquipment().setStatus(EquipmentStatus.RESERVED);
+        } else if (this.status == ContractStatus.ACTIVE) {
+            rental.setStatus(RentalStatus.ACTIVE);
+            rental.getEquipment().setStatus(EquipmentStatus.RENTED);
+        }
+    }
 }
