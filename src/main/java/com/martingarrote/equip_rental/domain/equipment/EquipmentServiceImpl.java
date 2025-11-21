@@ -46,6 +46,20 @@ class EquipmentServiceImpl implements EquipmentService {
 
     @Transactional(readOnly = true)
     @Override
+    public EquipmentEntity findByIdAndValidateAvailability(UUID id) {
+        var equipment = repository.findById(id).orElseThrow(
+                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
+        );
+
+        if (!equipment.getStatus().equals(EquipmentStatus.AVAILABLE)) {
+            throw new ServiceException(ErrorMessage.EQUIPMENT_UNAVAILABLE);
+        }
+
+        return equipment;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public PageResponse<EquipmentResponse> list(EquipmentStatus status, EquipmentType type, Pageable pageable) {
         Page<EquipmentEntity> filteredEquipments = repository.findByStatusAndType(status, type, pageable);
 

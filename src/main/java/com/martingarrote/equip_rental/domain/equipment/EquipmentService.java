@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface EquipmentService {
     EquipmentResponse create(EquipmentRequest request);
     EquipmentResponse retrieve(UUID id);
+    EquipmentEntity findByIdAndValidateAvailability(UUID id);
     PageResponse<EquipmentResponse> list(EquipmentStatus status, EquipmentType type, Pageable pageable);
     PageResponse<EquipmentResponse> findByCustomer(UUID customer, Pageable pageable);
     PageResponse<EquipmentResponse> findNeedingMaintenance(Pageable pageable);
