@@ -1,4 +1,4 @@
-package com.martingarrote.equip_rental.domain.user.response;
+package com.martingarrote.equip_rental.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.martingarrote.equip_rental.domain.user.Role;

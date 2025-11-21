@@ -1,4 +1,4 @@
-package com.martingarrote.equip_rental.domain.user.request;
+package com.martingarrote.equip_rental.domain.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

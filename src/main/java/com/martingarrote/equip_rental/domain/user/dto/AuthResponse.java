@@ -1,4 +1,4 @@
-package com.martingarrote.equip_rental.domain.user.response;
+package com.martingarrote.equip_rental.domain.user.dto;
 
 public record AuthResponse(
         String accessToken
