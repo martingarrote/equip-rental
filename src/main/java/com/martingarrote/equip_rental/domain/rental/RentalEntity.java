@@ -29,7 +29,7 @@ public class RentalEntity extends BaseEntity {
     private UUID id;
 
     @NotNull(message = "{rental.contract.notNull}")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id", nullable = false)
     private ContractEntity contract;
 
