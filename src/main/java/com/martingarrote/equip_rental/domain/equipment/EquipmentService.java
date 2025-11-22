@@ -10,10 +10,12 @@ import java.util.UUID;
 public interface EquipmentService {
     EquipmentResponse create(EquipmentRequest request);
     EquipmentResponse retrieve(UUID id);
-    EquipmentEntity findByIdAndValidateAvailability(UUID id);
     PageResponse<EquipmentResponse> list(EquipmentStatus status, EquipmentType type, Pageable pageable);
     PageResponse<EquipmentResponse> findByCustomer(UUID customer, Pageable pageable);
     PageResponse<EquipmentResponse> findNeedingMaintenance(Pageable pageable);
     EquipmentResponse update(UUID id, EquipmentRequest request);
+    EquipmentEntity reserve(UUID equipmentId);
+    EquipmentEntity rent(UUID equipmentId, boolean requestedByCustomer);
+    EquipmentEntity release(UUID equipmentId);
     void delete(UUID id);
 }

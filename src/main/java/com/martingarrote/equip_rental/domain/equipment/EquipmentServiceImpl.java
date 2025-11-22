@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.EnumSet;
 import java.util.UUID;
 
 @Service
@@ -42,20 +43,6 @@ class EquipmentServiceImpl implements EquipmentService {
         );
 
         return EquipmentResponse.detailed(equipment);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public EquipmentEntity findByIdAndValidateAvailability(UUID id) {
-        var equipment = repository.findById(id).orElseThrow(
-                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
-
-        if (!equipment.getStatus().equals(EquipmentStatus.AVAILABLE)) {
-            throw new ServiceException(ErrorMessage.EQUIPMENT_UNAVAILABLE);
-        }
-
-        return equipment;
     }
 
     @Transactional(readOnly = true)
@@ -107,6 +94,57 @@ class EquipmentServiceImpl implements EquipmentService {
         updatedEntity.setId(entityToUpdate.getId());
 
         return EquipmentResponse.detailed(repository.save(updatedEntity));
+    }
+
+    @Transactional
+    @Override
+    public EquipmentEntity reserve(UUID equipmentId) {
+        EquipmentEntity equipment = repository.findById(equipmentId).orElseThrow(
+                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
+        );
+
+        if (!equipment.getStatus().equals(EquipmentStatus.AVAILABLE)) {
+            throw new ServiceException(ErrorMessage.EQUIPMENT_UNAVAILABLE);
+        }
+
+        equipment.setStatus(EquipmentStatus.RESERVED);
+
+        return repository.save(equipment);
+    }
+
+
+    @Transactional
+    @Override
+    public EquipmentEntity rent(UUID equipmentId, boolean requestedByCustomer) {
+        EquipmentEntity equipment = repository.findById(equipmentId).orElseThrow(
+                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
+        );
+
+        var expectedStatus = requestedByCustomer ? EquipmentStatus.RESERVED : EquipmentStatus.AVAILABLE;
+
+        if (!equipment.getStatus().equals(expectedStatus)) {
+            throw new ServiceException(ErrorMessage.EQUIPMENT_UNAVAILABLE);
+        }
+
+        equipment.setStatus(EquipmentStatus.RENTED);
+
+        return repository.save(equipment);
+    }
+
+    @Transactional
+    @Override
+    public EquipmentEntity release(UUID equipmentId) {
+        EquipmentEntity equipment = repository.findById(equipmentId).orElseThrow(
+                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
+        );
+
+        if (equipment.getStatus().equals(EquipmentStatus.AVAILABLE)) {
+            return equipment;
+        }
+
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
+
+        return repository.save(equipment);
     }
 
     @Transactional
