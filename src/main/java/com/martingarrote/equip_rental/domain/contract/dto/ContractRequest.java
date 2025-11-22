@@ -3,6 +3,7 @@ package com.martingarrote.equip_rental.domain.contract.dto;
 import com.martingarrote.equip_rental.domain.contract.ContractStatus;
 import com.martingarrote.equip_rental.domain.rental.dto.RentalItemRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -12,15 +13,10 @@ import java.util.UUID;
 
 public record ContractRequest(
 
-        @Valid
-        List<RentalItemRequest> rentalItems,
+        @NotEmpty(message = "{contract.request.rentalItems.notEmpty}")
+        List<@Valid @NotNull RentalItemRequest> rentalItems,
 
-        @NotNull(message = "{contract.customer.notNull}", groups = EmployeeCreation.class)
         UUID customerId,
-
-        @NotNull(message = "{contract.status.notNull}", groups = EmployeeCreation.class)
-
-        ContractStatus status,
 
         @NotNull(message = "{contract.startDate.notNull}")
         LocalDate startDate,
@@ -32,7 +28,4 @@ public record ContractRequest(
         String notes
 
 ) {
-
-    public interface EmployeeCreation {
-    }
 }
