@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity(name = "Contract")
@@ -37,11 +38,7 @@ public class ContractEntity extends BaseEntity {
     private UserEntity customer;
 
     @OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<RentalEntity> rentals = new ArrayList<>();
-
-    @SequenceGenerator(name = "contract_number_seq", sequenceName = "contract_number_seq", allocationSize = 1)
-    @Column(name = "number", nullable = false, unique = true)
-    private Long number;
+    private List<RentalEntity> rentals;
 
     @NotNull(message = "{contract.startDate.notNull}")
     @Column(name = "start_date", nullable = false)
@@ -66,6 +63,10 @@ public class ContractEntity extends BaseEntity {
     private String notes;
 
     public void addRental(RentalEntity rental) {
+        if (Objects.isNull(this.rentals)) {
+            this.rentals = new ArrayList<>();
+        }
+
         rentals.add(rental);
         rental.setContract(this);
         rental.setCustomer(this.customer);
