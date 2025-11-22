@@ -14,7 +14,7 @@ CREATE TABLE rentals
     status               VARCHAR(20)                 NOT NULL,
     total_value          DECIMAL(10, 2)              NOT NULL,
     notes                VARCHAR(500),
-    return_condition     SMALLINT,
+    return_condition     VARCHAR(20),
     requires_maintenance BOOLEAN                     NOT NULL,
     CONSTRAINT pk_rentals PRIMARY KEY (id)
 );

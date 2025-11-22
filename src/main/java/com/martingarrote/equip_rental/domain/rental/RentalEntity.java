@@ -68,7 +68,7 @@ public class RentalEntity extends BaseEntity {
     @Column(name = "notes", length = 500)
     private String notes;
 
-    @Size(max = 20, message = "{rental.returnCondition.size}")
+    @Enumerated(EnumType.STRING)
     @Column(name = "return_condition", length = 20)
     private ReturnCondition returnCondition;
 
