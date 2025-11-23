@@ -15,7 +15,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ContractResponse(
         @With UUID id,
-        Long contractNumber,
         UUID customerId,
         String customerName,
         LocalDate startDate,
@@ -31,7 +30,6 @@ public record ContractResponse(
     public static ContractResponse detailed(ContractEntity entity) {
         return ContractResponse.builder()
                 .id(entity.getId())
-                .contractNumber(entity.getNumber())
                 .customerId(entity.getCustomer().getId())
                 .customerName(entity.getCustomer().getName())
                 .startDate(entity.getStartDate())
@@ -49,7 +47,6 @@ public record ContractResponse(
     public static ContractResponse summary(ContractEntity entity) {
         return ContractResponse.builder()
                 .id(entity.getId())
-                .contractNumber(entity.getNumber())
                 .customerName(entity.getCustomer().getName())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
