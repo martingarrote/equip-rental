@@ -30,7 +30,10 @@ public enum ErrorMessage {
     EQUIPMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Equipamento não foi encontrado"),
     EQUIPMENT_UNAVAILABLE(HttpStatus.CONFLICT, "Equipamento não está disponível"),
 
-    CONTRACT_NOT_FOUND(HttpStatus.NOT_FOUND, "Contrato não foi encontrado");
+    CONTRACT_NOT_FOUND(HttpStatus.NOT_FOUND, "Contrato não foi encontrado"),
+    CONTRACT_CUSTOMER_ID_REQUIRED(HttpStatus.BAD_REQUEST,"É necessário informar o ID do cliente ao criar um contrato em nome de terceiros."),
+    CONTRACT_ALREADY_RESOLVED(HttpStatus.BAD_REQUEST,"O contrato já foi respondido e não pode ser modificado novamente"),
+    CONTRACT_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN,"O contrato só pode ser cancelado pelo usuário que o requisitou.");
 
     private final HttpStatus status;
     private final String defaultMessage;
