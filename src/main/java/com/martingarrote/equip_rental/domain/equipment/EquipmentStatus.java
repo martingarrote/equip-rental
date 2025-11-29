@@ -4,6 +4,7 @@ public enum EquipmentStatus {
     RESERVED("Reservado"),
     AVAILABLE("Disponível"),
     RENTED("Alugado"),
+    NEED_MAINTENANCE("Precisa de manuntenção"),
     MAINTENANCE("Manutenção"),
     INACTIVE("Inativo");
 

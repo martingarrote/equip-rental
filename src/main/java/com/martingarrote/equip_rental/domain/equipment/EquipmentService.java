@@ -17,5 +17,6 @@ public interface EquipmentService {
     EquipmentEntity reserve(UUID equipmentId);
     EquipmentEntity rent(UUID equipmentId, boolean requestedByCustomer);
     EquipmentEntity release(UUID equipmentId);
+    EquipmentEntity sendToMaintenance(UUID equipmentId);
     void delete(UUID id);
 }

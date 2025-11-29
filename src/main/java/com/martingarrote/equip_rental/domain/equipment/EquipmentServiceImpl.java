@@ -148,6 +148,16 @@ class EquipmentServiceImpl implements EquipmentService {
 
     @Transactional
     @Override
+    public EquipmentEntity sendToMaintenance(UUID equipmentId) {
+        var equipment = repository.findById(equipmentId).orElseThrow(
+                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
+        );
+        equipment.setStatus(EquipmentStatus.NEED_MAINTENANCE);
+        return repository.save(equipment);
+    }
+
+    @Transactional
+    @Override
     public void delete(UUID id) {
         if (!repository.existsById(id)) {
             throw new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND);
