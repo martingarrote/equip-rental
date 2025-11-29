@@ -33,7 +33,9 @@ public enum ErrorMessage {
     CONTRACT_NOT_FOUND(HttpStatus.NOT_FOUND, "Contrato não foi encontrado"),
     CONTRACT_CUSTOMER_ID_REQUIRED(HttpStatus.BAD_REQUEST,"É necessário informar o ID do cliente ao criar um contrato em nome de terceiros."),
     CONTRACT_ALREADY_RESOLVED(HttpStatus.BAD_REQUEST,"O contrato já foi respondido e não pode ser modificado novamente"),
-    CONTRACT_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN,"O contrato só pode ser cancelado pelo usuário que o requisitou.");
+    CONTRACT_CANCELLATION_FORBIDDEN(HttpStatus.FORBIDDEN,"O contrato só pode ser cancelado pelo usuário que o requisitou."),
+
+    RENTAL_NOT_FOUND(HttpStatus.NOT_FOUND, "Locação não foi encontrada");
 
     private final HttpStatus status;
     private final String defaultMessage;
