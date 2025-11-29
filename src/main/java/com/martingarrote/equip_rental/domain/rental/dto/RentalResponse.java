@@ -6,6 +6,7 @@ import com.martingarrote.equip_rental.domain.rental.RentalEntity;
 import com.martingarrote.equip_rental.domain.rental.RentalStatus;
 import com.martingarrote.equip_rental.domain.rental.ReturnCondition;
 import com.martingarrote.equip_rental.domain.user.UserEntity;
+import com.martingarrote.equip_rental.domain.user.dto.UserResponse;
 import lombok.Builder;
 import lombok.With;
 
@@ -21,7 +22,7 @@ public record RentalResponse(
         @With UUID id,
         UUID contractId,
         EquipmentResponse equipment,
-        UserEntity customer,
+        UserResponse customer,
         LocalDate startDate,
         LocalDate expectedEndDate,
         LocalDate actualEndDate,
@@ -45,7 +46,7 @@ public record RentalResponse(
                 .id(entity.getId())
                 .contractId(entity.getContract().getId())
                 .equipment(EquipmentResponse.full(entity.getEquipment()))
-                .customer(entity.getCustomer())
+                .customer(UserResponse.customer(entity.getCustomer()))
                 .startDate(entity.getStartDate())
                 .expectedEndDate(entity.getExpectedEndDate())
                 .actualEndDate(entity.getActualEndDate())
@@ -71,7 +72,7 @@ public record RentalResponse(
                 .id(entity.getId())
                 .contractId(entity.getContract().getId())
                 .equipment(EquipmentResponse.detailed(entity.getEquipment()))
-                .customer(entity.getCustomer())
+                .customer(UserResponse.customer(entity.getCustomer()))
                 .startDate(entity.getStartDate())
                 .expectedEndDate(entity.getExpectedEndDate())
                 .actualEndDate(entity.getActualEndDate())
@@ -92,7 +93,7 @@ public record RentalResponse(
                 .id(entity.getId())
                 .contractId(entity.getContract().getId())
                 .equipment(EquipmentResponse.summary(entity.getEquipment()))
-                .customer(entity.getCustomer())
+                .customer(UserResponse.customer(entity.getCustomer()))
                 .startDate(entity.getStartDate())
                 .expectedEndDate(entity.getExpectedEndDate())
                 .status(entity.getStatus())
