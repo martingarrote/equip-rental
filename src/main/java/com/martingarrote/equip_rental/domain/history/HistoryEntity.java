@@ -17,8 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
-public class HistoryEntity extends BaseEntity {
+public class HistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
