@@ -51,4 +51,15 @@ public record UserResponse(
                 .active(user.isActive())
                 .build();
     }
+
+    public static UserResponse customer(UserEntity user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .companyCnpj(user.getCompanyCnpj())
+                .companyName(user.getCompanyName())
+                .build();
+    }
 }
