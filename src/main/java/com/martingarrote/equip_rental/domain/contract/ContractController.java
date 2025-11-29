@@ -28,11 +28,8 @@ public class ContractController {
 
     @PostMapping("/request")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<ContractResponse> requestContract(
-            @Valid @RequestBody ContractRequest request,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        String customerEmail = securityUtils.getCurrentUserEmail(userDetails);
+    public ResponseEntity<ContractResponse> requestContract(@Valid @RequestBody ContractRequest request) {
+        String customerEmail = securityUtils.getCurrentUserEmail();
         ContractResponse contract = service.createByCustomer(request, customerEmail);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -65,11 +62,8 @@ public class ContractController {
 
     @GetMapping("/my-contracts/{id}")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<ContractResponse> retrieveByCustomer(
-            @PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        String customerEmail = securityUtils.getCurrentUserEmail(userDetails);
+    public ResponseEntity<ContractResponse> retrieveByCustomer(@PathVariable UUID id) {
+        String customerEmail = securityUtils.getCurrentUserEmail();
         return ResponseEntity.ok(service.retrieveByCustomer(id, customerEmail));
     }
 
@@ -85,11 +79,10 @@ public class ContractController {
     @GetMapping("/my-contracts")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<PageResponse<ContractResponse>> listMyContracts(
-            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false) ContractStatus status,
             Pageable pageable
     ) {
-        String customerEmail = securityUtils.getCurrentUserEmail(userDetails);
+        String customerEmail = securityUtils.getCurrentUserEmail();
         return ResponseEntity.ok(service.listByCustomer(customerEmail, status, pageable));
     }
 
@@ -124,12 +117,8 @@ public class ContractController {
 
     @PatchMapping("/{id}/cancel")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<Void> cancel(
-            @PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody @Valid ContractActionRequest request
-    ) {
-        String userEmail = securityUtils.getCurrentUserEmail(userDetails);
+    public ResponseEntity<Void> cancel(@PathVariable UUID id,@RequestBody @Valid ContractActionRequest request) {
+        String userEmail = securityUtils.getCurrentUserEmail();
         service.cancel(id, userEmail, request);
         return ResponseEntity.noContent().build();
     }
