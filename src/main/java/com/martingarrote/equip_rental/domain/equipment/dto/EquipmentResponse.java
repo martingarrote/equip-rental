@@ -31,7 +31,7 @@ public record EquipmentResponse(
         LocalDateTime updatedAt,
         String updatedBy
 ) {
-    public static EquipmentResponse detailed(EquipmentEntity equipment) {
+    public static EquipmentResponse full(EquipmentEntity equipment) {
         return EquipmentResponse.builder()
                 .id(equipment.getId())
                 .name(equipment.getName())
@@ -50,7 +50,19 @@ public record EquipmentResponse(
                 .updatedBy(equipment.getUpdatedBy())
                 .build();
     }
-    
+
+    public static EquipmentResponse detailed(EquipmentEntity equipment) {
+        return EquipmentResponse.builder()
+                .id(equipment.getId())
+                .name(equipment.getName())
+                .type(equipment.getType())
+                .serialNumber(equipment.getSerialNumber())
+                .status(equipment.getStatus())
+                .dailyRentalCost(equipment.getDailyRentalCost())
+                .notes(equipment.getNotes())
+                .build();
+    }
+
     public static EquipmentResponse summary(EquipmentEntity equipment) {
         return EquipmentResponse.builder()
                 .name(equipment.getName())

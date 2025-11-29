@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.EnumSet;
 import java.util.UUID;
 
 @Service
@@ -32,7 +31,7 @@ class EquipmentServiceImpl implements EquipmentService {
 
         var saved = repository.save(EquipmentEntity.fromRequest(request));
 
-        return EquipmentResponse.detailed(saved);
+        return EquipmentResponse.full(saved);
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +41,7 @@ class EquipmentServiceImpl implements EquipmentService {
             () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
         );
 
-        return EquipmentResponse.detailed(equipment);
+        return EquipmentResponse.full(equipment);
     }
 
     @Transactional(readOnly = true)
@@ -93,7 +92,7 @@ class EquipmentServiceImpl implements EquipmentService {
         var updatedEntity = EquipmentEntity.fromRequest(request);
         updatedEntity.setId(entityToUpdate.getId());
 
-        return EquipmentResponse.detailed(repository.save(updatedEntity));
+        return EquipmentResponse.full(repository.save(updatedEntity));
     }
 
     @Transactional
