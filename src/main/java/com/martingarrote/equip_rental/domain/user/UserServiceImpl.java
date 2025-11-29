@@ -42,13 +42,13 @@ class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ServiceException(ErrorMessage.OBJECT_NOT_FOUND));
 
         if (user.getRole().equals(newRole)) {
-            return UserResponse.detailed(user);
+            return UserResponse.full(user);
         }
 
         user.setRole(newRole);
         var updatedUser = repository.save(user);
 
-        return UserResponse.detailed(updatedUser);
+        return UserResponse.full(updatedUser);
     }
 
     @Override

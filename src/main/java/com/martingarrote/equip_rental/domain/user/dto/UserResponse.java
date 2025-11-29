@@ -6,6 +6,7 @@ import com.martingarrote.equip_rental.domain.user.UserEntity;
 import lombok.Builder;
 import lombok.With;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -20,9 +21,13 @@ public record UserResponse(
         String companyCnpj,
         String department,
         String position,
-        Boolean active
+        Boolean active,
+        LocalDateTime createdAt,
+        String createdBy,
+        LocalDateTime updatedAt,
+        String updatedBy
 ) {
-    public static UserResponse detailed(UserEntity user) {
+    public static UserResponse full(UserEntity user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
