@@ -5,6 +5,9 @@ import com.martingarrote.equip_rental.domain.contract.dto.ContractRequest;
 import com.martingarrote.equip_rental.domain.contract.dto.ContractResponse;
 import com.martingarrote.equip_rental.domain.equipment.EquipmentEntity;
 import com.martingarrote.equip_rental.domain.equipment.EquipmentService;
+import com.martingarrote.equip_rental.domain.equipment.EquipmentStatus;
+import com.martingarrote.equip_rental.domain.history.HistoryAction;
+import com.martingarrote.equip_rental.domain.history.HistoryService;
 import com.martingarrote.equip_rental.domain.rental.RentalEntity;
 import com.martingarrote.equip_rental.domain.rental.RentalStatus;
 import com.martingarrote.equip_rental.domain.rental.dto.RentalItemRequest;
@@ -13,6 +16,7 @@ import com.martingarrote.equip_rental.domain.user.UserEntity;
 import com.martingarrote.equip_rental.infrastructure.exception.ErrorMessage;
 import com.martingarrote.equip_rental.infrastructure.exception.ServiceException;
 import com.martingarrote.equip_rental.infrastructure.response.PageResponse;
+import com.martingarrote.equip_rental.infrastructure.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +35,9 @@ class ContractServiceImpl implements ContractService {
     private final ContractRepository repository;
     private final UserDataProvider userDataProvider;
     private final EquipmentService equipmentService;
+
+    private final SecurityUtils securityUtils;
+    private final HistoryService historyService;
 
     @Transactional
     @Override
@@ -129,6 +136,13 @@ class ContractServiceImpl implements ContractService {
         contract.getRentals().forEach(rental -> {
             rental.setStatus(RentalStatus.ACTIVE);
             equipmentService.rent(rental.getEquipment().getId(), true);
+
+            historyService.register(
+                    rental.getEquipment().getId(),
+                    securityUtils.getCurrentUserId(),
+                    HistoryAction.CONTRACT_APPROVED,
+                    "Contrato com o equipamento foi aprovado"
+            );
         });
 
         repository.save(contract);
@@ -149,6 +163,13 @@ class ContractServiceImpl implements ContractService {
         contract.getRentals().forEach(rental -> {
             rental.setStatus(RentalStatus.REJECTED);
             equipmentService.release(rental.getEquipment().getId());
+
+            historyService.register(
+                    rental.getEquipment().getId(),
+                    securityUtils.getCurrentUserId(),
+                    HistoryAction.CONTRACT_REJECTED,
+                    String.format("Contrato com o equipamento rejeitado com motivo: %s", request.reason())
+            );
         });
 
         repository.save(contract);
@@ -168,6 +189,13 @@ class ContractServiceImpl implements ContractService {
         contract.getRentals().forEach(rental -> {
             rental.setStatus(RentalStatus.CANCELLED);
             equipmentService.release(rental.getEquipment().getId());
+
+            historyService.register(
+                    rental.getEquipment().getId(),
+                    securityUtils.getCurrentUserId(),
+                    HistoryAction.CONTRACT_CANCELLED,
+                    String.format("Contrato com o equipamento cancelado com motivo: %s", request.reason())
+            );
         });
 
         repository.save(contract);
@@ -189,6 +217,17 @@ class ContractServiceImpl implements ContractService {
         for (RentalItemRequest item : request.rentalItems()) {
             EquipmentEntity equipment = origin.applyEquipmentAction(equipmentService, item.equipmentId());
             BigDecimal itemValue = calculateRentalCost(equipment.getDailyRentalCost(), request.startDate(), request.endDate());
+
+            var employeeOriginated = origin.equals(ContractCreationOrigin.EMPLOYEE);
+            HistoryAction action = employeeOriginated ? HistoryAction.CONTRACT_CREATED : HistoryAction.CONTRACT_REQUESTED;
+            String actionInText = employeeOriginated ? "criado" : "requisitado";
+
+            historyService.register(
+                    equipment.getId(),
+                    securityUtils.getCurrentUserId(),
+                    action,
+                    String.format("Contrato com o equipamento foi %s", actionInText)
+            );
 
             RentalEntity rental = RentalEntity.builder()
                     .equipment(equipment)
