@@ -1,10 +1,6 @@
 CREATE TABLE histories
 (
     id           UUID                        NOT NULL,
-    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    created_by   VARCHAR(100)                NOT NULL,
-    updated_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_by   VARCHAR(100)                NOT NULL,
     equipment_id UUID                        NOT NULL,
     user_id      UUID                        NOT NULL,
     action       VARCHAR(30)                 NOT NULL,
