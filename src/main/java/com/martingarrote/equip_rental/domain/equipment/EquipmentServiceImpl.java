@@ -2,9 +2,12 @@ package com.martingarrote.equip_rental.domain.equipment;
 
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentRequest;
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentResponse;
+import com.martingarrote.equip_rental.domain.history.HistoryAction;
+import com.martingarrote.equip_rental.domain.history.HistoryService;
 import com.martingarrote.equip_rental.infrastructure.exception.ErrorMessage;
 import com.martingarrote.equip_rental.infrastructure.exception.ServiceException;
 import com.martingarrote.equip_rental.infrastructure.response.PageResponse;
+import com.martingarrote.equip_rental.infrastructure.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,9 @@ class EquipmentServiceImpl implements EquipmentService {
     private final EquipmentRepository repository;
     private final EquipmentDataProvider dataProvider;
 
+    private final SecurityUtils securityUtils;
+    private final HistoryService historyService;
+
     private static final Integer STANDARD_LEAD_TIME = 7;
 
     @Transactional
@@ -31,6 +37,13 @@ class EquipmentServiceImpl implements EquipmentService {
         }
 
         var saved = repository.save(EquipmentEntity.fromRequest(request));
+
+        historyService.register(
+                saved.getId(),
+                securityUtils.getCurrentUserId(),
+                HistoryAction.CREATED,
+                "Novo equipamento criado"
+        );
 
         return EquipmentResponse.full(saved);
     }
@@ -87,6 +100,13 @@ class EquipmentServiceImpl implements EquipmentService {
         var updatedEntity = EquipmentEntity.fromRequest(request);
         updatedEntity.setId(entityToUpdate.getId());
 
+        historyService.register(
+                updatedEntity.getId(),
+                securityUtils.getCurrentUserId(),
+                HistoryAction.UPDATED,
+                "Equipamento atualizado"
+        );
+
         return EquipmentResponse.full(repository.save(updatedEntity));
     }
 
@@ -100,6 +120,13 @@ class EquipmentServiceImpl implements EquipmentService {
         }
 
         equipment.setStatus(EquipmentStatus.RESERVED);
+
+        historyService.register(
+                equipment.getId(),
+                securityUtils.getCurrentUserId(),
+                HistoryAction.RESERVED,
+                "Equipamento reservado"
+        );
 
         return repository.save(equipment);
     }
@@ -118,6 +145,13 @@ class EquipmentServiceImpl implements EquipmentService {
 
         equipment.setStatus(EquipmentStatus.RENTED);
 
+        historyService.register(
+                equipment.getId(),
+                securityUtils.getCurrentUserId(),
+                HistoryAction.RENTED,
+                "Equipamento locado"
+        );
+
         return repository.save(equipment);
     }
 
@@ -132,6 +166,13 @@ class EquipmentServiceImpl implements EquipmentService {
 
         equipment.setStatus(EquipmentStatus.AVAILABLE);
 
+        historyService.register(
+                equipment.getId(),
+                securityUtils.getCurrentUserId(),
+                HistoryAction.RELEASED,
+                "Equipamento liberado"
+        );
+
         return repository.save(equipment);
     }
 
@@ -139,7 +180,16 @@ class EquipmentServiceImpl implements EquipmentService {
     @Override
     public EquipmentEntity sendToMaintenance(UUID equipmentId) {
         EquipmentEntity equipment = dataProvider.getEntityById(equipmentId);
+
         equipment.setStatus(EquipmentStatus.NEED_MAINTENANCE);
+
+        historyService.register(
+                equipment.getId(),
+                securityUtils.getCurrentUserId(),
+                HistoryAction.MAINTENANCE_REQUESTED,
+                "Equipamento colocado na fila para manutenção"
+        );
+
         return repository.save(equipment);
     }
 
@@ -149,6 +199,13 @@ class EquipmentServiceImpl implements EquipmentService {
         if (!repository.existsById(id)) {
             throw new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND);
         }
+
+        historyService.register(
+                id,
+                securityUtils.getCurrentUserId(),
+                HistoryAction.DELETED,
+                "Equipamento excluido"
+        );
 
         repository.deleteById(id);
     }
