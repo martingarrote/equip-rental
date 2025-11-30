@@ -8,8 +8,8 @@ import com.martingarrote.equip_rental.domain.equipment.EquipmentService;
 import com.martingarrote.equip_rental.domain.rental.RentalEntity;
 import com.martingarrote.equip_rental.domain.rental.RentalStatus;
 import com.martingarrote.equip_rental.domain.rental.dto.RentalItemRequest;
+import com.martingarrote.equip_rental.domain.user.UserDataProvider;
 import com.martingarrote.equip_rental.domain.user.UserEntity;
-import com.martingarrote.equip_rental.domain.user.UserService;
 import com.martingarrote.equip_rental.infrastructure.exception.ErrorMessage;
 import com.martingarrote.equip_rental.infrastructure.exception.ServiceException;
 import com.martingarrote.equip_rental.infrastructure.response.PageResponse;
@@ -29,13 +29,13 @@ import java.util.UUID;
 class ContractServiceImpl implements ContractService {
 
     private final ContractRepository repository;
-    private final UserService userService;
+    private final UserDataProvider userDataProvider;
     private final EquipmentService equipmentService;
 
     @Transactional
     @Override
     public ContractResponse createByCustomer(ContractRequest request, String customerEmail) {
-        UserEntity customer = userService.findEntityByEmail(customerEmail);
+        UserEntity customer = userDataProvider.getEntityByEmail(customerEmail);
         ContractEntity contract = createContractEntity(request, customer, ContractCreationOrigin.CUSTOMER);
         return ContractResponse.detailed(repository.save(contract));
     }
@@ -47,7 +47,7 @@ class ContractServiceImpl implements ContractService {
             throw new ServiceException(ErrorMessage.CONTRACT_CUSTOMER_ID_REQUIRED);
         }
 
-        UserEntity customer = userService.findEntityById(request.customerId());
+        UserEntity customer = userDataProvider.getEntityById(request.customerId());
         ContractEntity contract = createContractEntity(request, customer, ContractCreationOrigin.EMPLOYEE);
         return ContractResponse.detailed(repository.save(contract));
     }

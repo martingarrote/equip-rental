@@ -19,6 +19,7 @@ import java.util.UUID;
 class EquipmentServiceImpl implements EquipmentService {
 
     private final EquipmentRepository repository;
+    private final EquipmentDataProvider dataProvider;
 
     private static final Integer STANDARD_LEAD_TIME = 7;
 
@@ -37,11 +38,7 @@ class EquipmentServiceImpl implements EquipmentService {
     @Transactional(readOnly = true)
     @Override
     public EquipmentResponse retrieve(UUID id) {
-        EquipmentEntity equipment = repository.findById(id).orElseThrow(
-            () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
-
-        return EquipmentResponse.full(equipment);
+        return EquipmentResponse.full(dataProvider.getEntityById(id));
     }
 
     @Transactional(readOnly = true)
@@ -81,9 +78,7 @@ class EquipmentServiceImpl implements EquipmentService {
     @Transactional
     @Override
     public EquipmentResponse update(UUID id, EquipmentRequest request) {
-        var entityToUpdate = repository.findById(id).orElseThrow(
-                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
+        var entityToUpdate = dataProvider.getEntityById(id);
 
         if (entityToUpdate.getSerialNumber().equals(request.serialNumber()) && repository.existsBySerialNumber(request.serialNumber())) {
             throw new ServiceException(ErrorMessage.EQUIPMENT_SERIAL_NUMBER_ALREADY_IN_USE);
@@ -98,9 +93,7 @@ class EquipmentServiceImpl implements EquipmentService {
     @Transactional
     @Override
     public EquipmentEntity reserve(UUID equipmentId) {
-        EquipmentEntity equipment = repository.findById(equipmentId).orElseThrow(
-                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
+        EquipmentEntity equipment = dataProvider.getEntityById(equipmentId);
 
         if (!equipment.getStatus().equals(EquipmentStatus.AVAILABLE)) {
             throw new ServiceException(ErrorMessage.EQUIPMENT_UNAVAILABLE);
@@ -115,9 +108,7 @@ class EquipmentServiceImpl implements EquipmentService {
     @Transactional
     @Override
     public EquipmentEntity rent(UUID equipmentId, boolean requestedByCustomer) {
-        EquipmentEntity equipment = repository.findById(equipmentId).orElseThrow(
-                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
+        EquipmentEntity equipment = dataProvider.getEntityById(equipmentId);
 
         var expectedStatus = requestedByCustomer ? EquipmentStatus.RESERVED : EquipmentStatus.AVAILABLE;
 
@@ -133,9 +124,7 @@ class EquipmentServiceImpl implements EquipmentService {
     @Transactional
     @Override
     public EquipmentEntity release(UUID equipmentId) {
-        EquipmentEntity equipment = repository.findById(equipmentId).orElseThrow(
-                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
+        EquipmentEntity equipment = dataProvider.getEntityById(equipmentId);
 
         if (equipment.getStatus().equals(EquipmentStatus.AVAILABLE)) {
             return equipment;
@@ -149,9 +138,7 @@ class EquipmentServiceImpl implements EquipmentService {
     @Transactional
     @Override
     public EquipmentEntity sendToMaintenance(UUID equipmentId) {
-        var equipment = repository.findById(equipmentId).orElseThrow(
-                () -> new ServiceException(ErrorMessage.EQUIPMENT_NOT_FOUND)
-        );
+        EquipmentEntity equipment = dataProvider.getEntityById(equipmentId);
         equipment.setStatus(EquipmentStatus.NEED_MAINTENANCE);
         return repository.save(equipment);
     }

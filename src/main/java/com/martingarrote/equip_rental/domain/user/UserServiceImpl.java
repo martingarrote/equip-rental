@@ -19,14 +19,16 @@ import java.util.UUID;
 class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final UserDataProvider dataProvider;
+
     private final JwtTokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final UserDataProvider userDataProvider;
 
     @Override
     @Transactional
     public AuthResponse login(AuthRequest request) {
-        var user = repository.findByEmail(request.email())
-                .orElseThrow(() -> new ServiceException(ErrorMessage.OBJECT_NOT_FOUND));
+        var user = dataProvider.getEntityByEmail(request.email());
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new ServiceException(ErrorMessage.BAD_CREDENTIALS);
@@ -37,9 +39,8 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse changeUserRole(String userId, Role newRole) {
-        var user = repository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new ServiceException(ErrorMessage.OBJECT_NOT_FOUND));
+    public UserResponse changeUserRole(UUID userId, Role newRole) {
+        var user = dataProvider.getEntityById(userId);
 
         if (user.getRole().equals(newRole)) {
             return UserResponse.full(user);
@@ -68,21 +69,5 @@ class UserServiceImpl implements UserService {
                 .build();
 
         return UserResponse.summary(repository.save(user));
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public UserEntity findEntityByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(
-                () -> new ServiceException(ErrorMessage.USER_NOT_FOUND)
-        );
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public UserEntity findEntityById(UUID id) {
-        return repository.findById(id).orElseThrow(
-                () -> new ServiceException(ErrorMessage.USER_NOT_FOUND)
-        );
     }
 }

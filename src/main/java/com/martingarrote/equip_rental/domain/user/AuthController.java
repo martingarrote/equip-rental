@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -39,7 +40,7 @@ public class AuthController {
 
     @PatchMapping("{id}/role")
     public ResponseEntity<UserResponse> changeRole(
-            @PathVariable String id,
+            @PathVariable UUID id,
             @RequestParam Role role
     ) {
         return ResponseEntity.ok(service.changeUserRole(id, role));

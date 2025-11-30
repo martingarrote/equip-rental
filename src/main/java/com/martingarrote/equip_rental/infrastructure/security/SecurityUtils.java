@@ -1,6 +1,6 @@
 package com.martingarrote.equip_rental.infrastructure.security;
 
-import com.martingarrote.equip_rental.domain.user.UserService;
+import com.martingarrote.equip_rental.domain.user.UserDataProvider;
 import com.martingarrote.equip_rental.infrastructure.exception.ErrorMessage;
 import com.martingarrote.equip_rental.infrastructure.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SecurityUtils {
 
-    private final UserService userService;
+    private final UserDataProvider userDataProvider;
 
     public String getCurrentUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -28,6 +28,6 @@ public class SecurityUtils {
 
     public UUID getCurrentUserId() {
         var email = getCurrentUserEmail();
-        return userService.findEntityByEmail(email).getId();
+        return userDataProvider.getUserIdByEmail(email);
     }
 }
