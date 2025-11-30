@@ -3,13 +3,13 @@ package com.martingarrote.equip_rental.domain.history;
 public enum HistoryAction {
     CREATED,
     UPDATED,
+    DELETED,
+
     RENTED,
-    DELIVERED,
-    RETURNED,
+    RESERVED,
+    RELEASED,
+
+    MAINTENANCE_REQUESTED,
     MAINTENANCE_STARTED,
-    MAINTENANCE_COMPLETED,
-    STATUS_CHANGED,
-    CONTRACT_APPROVED,
-    CONTRACT_REJECTED,
-    CONTRACT_CANCELLED
+    MAINTENANCE_COMPLETED
 }

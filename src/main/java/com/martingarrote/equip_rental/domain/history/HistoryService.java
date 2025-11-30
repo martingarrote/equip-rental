@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface HistoryService {
 
-    void create(UUID equipmentId, UUID user, HistoryAction action, String description);
+    void register(UUID equipmentId, UUID user, HistoryAction action, String description);
 
     PageResponse<HistoryResponse> list(UUID equipmentId, UUID userId, HistoryAction action, HistoryDetailLevel level, Pageable pageable);
 }

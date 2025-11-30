@@ -23,7 +23,7 @@ class HistoryServiceImpl implements HistoryService {
 
     @Override
     @Transactional
-    public void create(UUID equipmentId, UUID userId, HistoryAction action, String description) {
+    public void register(UUID equipmentId, UUID userId, HistoryAction action, String description) {
         var equipment = equipmentDataProvider.getEntityById(equipmentId);
         var user = userDataProvider.getEntityById(userId);
 
