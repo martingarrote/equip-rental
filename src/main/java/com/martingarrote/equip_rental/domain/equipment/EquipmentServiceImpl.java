@@ -1,5 +1,6 @@
 package com.martingarrote.equip_rental.domain.equipment;
 
+import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentDashboardResponse;
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentRequest;
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentResponse;
 import com.martingarrote.equip_rental.domain.history.HistoryAction;
@@ -86,6 +87,18 @@ class EquipmentServiceImpl implements EquipmentService {
                 filteredEquipments,
                 equipment -> EquipmentResponse.summary(equipment).withId(equipment.getId())
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public EquipmentDashboardResponse getDashboard(EquipmentStatus status, EquipmentType type, Pageable pageable) {
+        var stats = repository.getStatsByType(type);
+        var page = PageResponse.of(
+                repository.findByStatusAndType(status, type, pageable),
+                equipment -> EquipmentResponse.summary(equipment).withId(equipment.getId())
+        );
+
+        return new EquipmentDashboardResponse(page, stats);
     }
 
     @Transactional

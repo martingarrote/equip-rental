@@ -1,5 +1,6 @@
 package com.martingarrote.equip_rental.domain.equipment;
 
+import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentDashboardResponse;
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentRequest;
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentResponse;
 import com.martingarrote.equip_rental.infrastructure.response.PageResponse;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -19,6 +21,7 @@ public class EquipmentController {
 
     private final EquipmentService service;
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     @PostMapping
     public ResponseEntity<EquipmentResponse> create(@Valid @RequestBody EquipmentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
@@ -35,6 +38,14 @@ public class EquipmentController {
             @RequestParam(required = false) EquipmentType type,
             Pageable pageable) {
         return ResponseEntity.ok(service.list(status, type, pageable));
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<EquipmentDashboardResponse> getDashboard(
+            @RequestParam(required = false) EquipmentStatus status,
+            @RequestParam(required = false) EquipmentType type,
+            Pageable pageable) {
+        return ResponseEntity.ok(service.getDashboard(status, type, pageable));
     }
 
     @GetMapping("/customer/{customerId}")
