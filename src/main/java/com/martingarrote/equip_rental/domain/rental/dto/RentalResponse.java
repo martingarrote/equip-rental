@@ -5,7 +5,6 @@ import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentResponse;
 import com.martingarrote.equip_rental.domain.rental.RentalEntity;
 import com.martingarrote.equip_rental.domain.rental.RentalStatus;
 import com.martingarrote.equip_rental.domain.rental.ReturnCondition;
-import com.martingarrote.equip_rental.domain.user.UserEntity;
 import com.martingarrote.equip_rental.domain.user.dto.UserResponse;
 import lombok.Builder;
 import lombok.With;
@@ -26,7 +25,7 @@ public record RentalResponse(
         LocalDate startDate,
         LocalDate expectedEndDate,
         LocalDate actualEndDate,
-        RentalStatus status,
+        String status,
         BigDecimal totalValue,
         String notes,
         ReturnCondition returnCondition,
@@ -50,7 +49,7 @@ public record RentalResponse(
                 .startDate(entity.getStartDate())
                 .expectedEndDate(entity.getExpectedEndDate())
                 .actualEndDate(entity.getActualEndDate())
-                .status(entity.getStatus())
+                .status(entity.getStatus().getDescription())
                 .totalValue(entity.getTotalValue())
                 .notes(entity.getNotes())
                 .returnCondition(entity.getReturnCondition())
@@ -76,7 +75,7 @@ public record RentalResponse(
                 .startDate(entity.getStartDate())
                 .expectedEndDate(entity.getExpectedEndDate())
                 .actualEndDate(entity.getActualEndDate())
-                .status(entity.getStatus())
+                .status(entity.getStatus().getDescription())
                 .totalValue(entity.getTotalValue())
                 .notes(entity.getNotes())
                 .returnCondition(entity.getReturnCondition())
@@ -96,7 +95,7 @@ public record RentalResponse(
                 .customer(UserResponse.customer(entity.getCustomer()))
                 .startDate(entity.getStartDate())
                 .expectedEndDate(entity.getExpectedEndDate())
-                .status(entity.getStatus())
+                .status(entity.getStatus().getDescription())
                 .isOverdue(isOverdue)
                 .build();
     }
@@ -116,4 +115,5 @@ public record RentalResponse(
             return ChronoUnit.DAYS.between(entity.getStartDate(), LocalDate.now());
         }
         return null;
-    }}
+    }
+}

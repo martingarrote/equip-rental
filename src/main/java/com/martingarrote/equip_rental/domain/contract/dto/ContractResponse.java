@@ -2,7 +2,6 @@ package com.martingarrote.equip_rental.domain.contract.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.martingarrote.equip_rental.domain.contract.ContractEntity;
-import com.martingarrote.equip_rental.domain.contract.ContractStatus;
 import lombok.Builder;
 import lombok.With;
 
@@ -19,7 +18,7 @@ public record ContractResponse(
         String customerName,
         LocalDate startDate,
         LocalDate endDate,
-        ContractStatus status,
+        String status,
         BigDecimal totalValue,
         String notes,
         LocalDateTime createdAt,
@@ -34,7 +33,7 @@ public record ContractResponse(
                 .customerName(entity.getCustomer().getName())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .status(entity.getStatus())
+                .status(entity.getStatus().getDescription())
                 .totalValue(entity.getTotalValue())
                 .notes(entity.getNotes())
                 .createdAt(entity.getCreatedAt())
@@ -50,7 +49,7 @@ public record ContractResponse(
                 .customerName(entity.getCustomer().getName())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .status(entity.getStatus())
+                .status(entity.getStatus().getDescription())
                 .totalValue(entity.getTotalValue())
                 .build();
     }

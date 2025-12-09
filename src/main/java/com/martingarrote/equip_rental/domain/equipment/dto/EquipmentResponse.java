@@ -2,8 +2,6 @@ package com.martingarrote.equip_rental.domain.equipment.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.martingarrote.equip_rental.domain.equipment.EquipmentEntity;
-import com.martingarrote.equip_rental.domain.equipment.EquipmentStatus;
-import com.martingarrote.equip_rental.domain.equipment.EquipmentType;
 import lombok.Builder;
 import lombok.With;
 
@@ -17,9 +15,9 @@ import java.util.UUID;
 public record EquipmentResponse(
         @With UUID id,
         String name,
-        EquipmentType type,
+        String type,
         String serialNumber,
-        EquipmentStatus status,
+        String status,
         LocalDate acquisitionDate,
         BigDecimal acquisitionValue,
         BigDecimal dailyRentalCost,
@@ -35,9 +33,9 @@ public record EquipmentResponse(
         return EquipmentResponse.builder()
                 .id(equipment.getId())
                 .name(equipment.getName())
-                .type(equipment.getType())
+                .type(equipment.getType().getDescription())
                 .serialNumber(equipment.getSerialNumber())
-                .status(equipment.getStatus())
+                .status(equipment.getStatus().getDescription())
                 .acquisitionDate(equipment.getAcquisitionDate())
                 .acquisitionValue(equipment.getAcquisitionValue())
                 .dailyRentalCost(equipment.getDailyRentalCost())
@@ -55,9 +53,9 @@ public record EquipmentResponse(
         return EquipmentResponse.builder()
                 .id(equipment.getId())
                 .name(equipment.getName())
-                .type(equipment.getType())
+                .type(equipment.getType().getDescription())
                 .serialNumber(equipment.getSerialNumber())
-                .status(equipment.getStatus())
+                .status(equipment.getStatus().getDescription())
                 .dailyRentalCost(equipment.getDailyRentalCost())
                 .notes(equipment.getNotes())
                 .build();
@@ -66,9 +64,9 @@ public record EquipmentResponse(
     public static EquipmentResponse summary(EquipmentEntity equipment) {
         return EquipmentResponse.builder()
                 .name(equipment.getName())
-                .type(equipment.getType())
+                .type(equipment.getType().getDescription())
                 .serialNumber(equipment.getSerialNumber())
-                .status(equipment.getStatus())
+                .status(equipment.getStatus().getDescription())
                 .build();
     }
 }

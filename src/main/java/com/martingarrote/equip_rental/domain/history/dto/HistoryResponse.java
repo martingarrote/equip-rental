@@ -2,7 +2,6 @@ package com.martingarrote.equip_rental.domain.history.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.martingarrote.equip_rental.domain.equipment.dto.EquipmentResponse;
-import com.martingarrote.equip_rental.domain.history.HistoryAction;
 import com.martingarrote.equip_rental.domain.history.HistoryEntity;
 import com.martingarrote.equip_rental.domain.user.dto.UserResponse;
 import lombok.Builder;
@@ -19,7 +18,7 @@ public record HistoryResponse(
         UserResponse user,
         UUID userId,
         String userName,
-        HistoryAction action,
+        String action,
         LocalDateTime timestamp,
         String description
 ) {
@@ -27,7 +26,7 @@ public record HistoryResponse(
         return HistoryResponse.builder()
                 .equipment(EquipmentResponse.summary(entity.getEquipment()))
                 .user(UserResponse.summary(entity.getUser()))
-                .action(entity.getAction())
+                .action(entity.getAction().getDescription())
                 .timestamp(entity.getTimestamp())
                 .description(entity.getDescription())
                 .build();
@@ -39,7 +38,7 @@ public record HistoryResponse(
                 .equipmentName(entity.getEquipment().getName())
                 .userId(entity.getUser().getId())
                 .userName(entity.getUser().getName())
-                .action(entity.getAction())
+                .action(entity.getAction().getDescription())
                 .timestamp(entity.getTimestamp())
                 .description(entity.getDescription())
                 .build();
@@ -49,7 +48,7 @@ public record HistoryResponse(
         return HistoryResponse.builder()
                 .equipmentId(entity.getEquipment().getId())
                 .userId(entity.getUser().getId())
-                .action(entity.getAction())
+                .action(entity.getAction().getDescription())
                 .timestamp(entity.getTimestamp())
                 .build();
     }
