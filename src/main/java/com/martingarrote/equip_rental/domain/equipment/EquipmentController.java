@@ -27,6 +27,7 @@ public class EquipmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<EquipmentResponse> retrieve(@PathVariable UUID id) {
         return ResponseEntity.ok(service.retrieve(id));
@@ -40,6 +41,7 @@ public class EquipmentController {
         return ResponseEntity.ok(service.list(status, type, pageable));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     @GetMapping("/dashboard")
     public ResponseEntity<EquipmentDashboardResponse> getDashboard(
             @RequestParam(required = false) EquipmentStatus status,
@@ -55,12 +57,14 @@ public class EquipmentController {
         return ResponseEntity.ok(service.findByCustomer(customerId, pageable));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     @GetMapping("/maintenance/needed")
     public ResponseEntity<PageResponse<EquipmentResponse>> findNeedingMaintenance(
             Pageable pageable) {
         return ResponseEntity.ok(service.findNeedingMaintenance(pageable));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<EquipmentResponse> update(
             @PathVariable UUID id,
@@ -68,6 +72,7 @@ public class EquipmentController {
         return ResponseEntity.ok(service.update(id, request));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);
