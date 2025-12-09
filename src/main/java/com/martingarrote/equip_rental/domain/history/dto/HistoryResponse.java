@@ -15,6 +15,7 @@ public record HistoryResponse(
         EquipmentResponse equipment,
         UUID equipmentId,
         String equipmentName,
+        String equipmentSerialNumber,
         UserResponse user,
         UUID userId,
         String userName,
@@ -36,6 +37,7 @@ public record HistoryResponse(
         return HistoryResponse.builder()
                 .equipmentId(entity.getEquipment().getId())
                 .equipmentName(entity.getEquipment().getName())
+                .equipmentSerialNumber(entity.getEquipment().getSerialNumber())
                 .userId(entity.getUser().getId())
                 .userName(entity.getUser().getName())
                 .action(entity.getAction().getDescription())
